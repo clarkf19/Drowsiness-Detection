@@ -1,23 +1,13 @@
-# =========================
-# Datasets (too large for Git)
-# =========================
-datasets/
-
-# Processed images (generated)
-processed/
-
-# Python virtual environment
-venv/
-
-# Trained models
-models/
-
-# Experiment outputs
-results/
-
-# Python cache
+# Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
 
 # Jupyter
 .ipynb_checkpoints/
@@ -29,5 +19,26 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Environment variables (if you add any later)
-.env
+# Large datasets
+datasets/
+processed/
+
+# Model checkpoints
+models/*.h5
+models/*.keras
+models/*.ckpt
+models/*.weights.h5
+models/*.pth
+models/*.pt
+models/*.onnx
+models/*.tflite
+
+# Logs
+*.log
+logs/
+
+# TensorBoard
+runs/
+
+# Cache
+.cache/
