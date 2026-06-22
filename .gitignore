@@ -1,16 +1,33 @@
-# Datasets
+# =========================
+# Datasets (too large for Git)
+# =========================
 datasets/
 
-# Python virtual env
+# Processed images (generated)
+processed/
+
+# Python virtual environment
 venv/
 
-# Generated outputs
+# Trained models
 models/
+
+# Experiment outputs
 results/
 
 # Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
 
 # VS Code
 .vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables (if you add any later)
+.env
