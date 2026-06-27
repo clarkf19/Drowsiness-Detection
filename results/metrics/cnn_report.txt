@@ -1,0 +1,8 @@
+              precision    recall  f1-score   support
+
+       Alert       0.99      0.99      0.99      3008
+      Drowsy       0.99      0.99      0.99      3540
+
+    accuracy                           0.99      6548
+   macro avg       0.99      0.99      0.99      6548
+weighted avg       0.99      0.99      0.99      6548

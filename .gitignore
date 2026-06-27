@@ -23,22 +23,20 @@ Thumbs.db
 datasets/
 processed/
 
-# Model checkpoints
-models/*.h5
-models/*.keras
-models/*.ckpt
-models/*.weights.h5
-models/*.pth
-models/*.pt
-models/*.onnx
-models/*.tflite
-
 # Logs
 *.log
 logs/
 
 # TensorBoard
 runs/
+results/tensorboard/
 
 # Cache
 .cache/
+
+# Large deployment models (future)
+models/*.onnx
+models/*.tflite
+
+# Keep PyTorch checkpoints
+# (do NOT ignore .pth files)
