@@ -1,0 +1,4 @@
+Metric,Result
+Accuracy,73.87 ± 4.18
+Macro F1,72.92 ± 5.10
+Low Vigilant F1,66.17 ± 7.13

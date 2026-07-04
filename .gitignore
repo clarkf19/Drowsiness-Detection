@@ -19,10 +19,6 @@ env/
 .DS_Store
 Thumbs.db
 
-# Large datasets
-datasets/
-processed/
-
 # Logs
 *.log
 logs/
@@ -34,9 +30,9 @@ results/tensorboard/
 # Cache
 .cache/
 
-# Large deployment models (future)
+# Large deployment models
 models/*.onnx
 models/*.tflite
 
-# Keep PyTorch checkpoints
-# (do NOT ignore .pth files)
+datasets/
+processed/
