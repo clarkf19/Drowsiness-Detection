@@ -34,5 +34,6 @@ results/tensorboard/
 models/*.onnx
 models/*.tflite
 
-datasets/
+models/*.pth
 processed/
+datasets/
