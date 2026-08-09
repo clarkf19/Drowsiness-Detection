@@ -1,0 +1,56 @@
+name: drowsiness_app
+description: "Real-time driver drowsiness detection using on-device CNN-LSTM inference."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+# Point 10 – all required dependencies
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Camera
+  camera: ^0.10.5+9
+
+  # On-device TFLite inference (Point 13)
+  tflite_flutter: ^0.10.4
+
+  # Face detection – replaces MediaPipe (Point 15)
+  google_mlkit_face_detection: ^0.11.0
+
+  # Image processing / resizing (Point 16)
+  image: ^4.2.0
+
+  # Audio alert (Point 24)
+  audioplayers: ^6.0.0
+
+  # Haptic vibration (Point 24)
+  vibration: ^2.0.0
+
+  # Permissions (camera) (Point 12)
+  permission_handler: ^11.3.1
+
+  # State management (Point 21)
+  provider: ^6.1.2
+
+  # Unique session ID (Point 17)
+  uuid: ^4.4.2
+
+flutter:
+  uses-material-design: true
+
+  # Point 11 – TFLite model assets
+  assets:
+    - assets/models/cnn.tflite
+    - assets/models/lstm.tflite
+    - assets/models/mean.npy
+    - assets/models/std.npy
+    - assets/sounds/alert_beep.mp3
+    - assets/sounds/low_vigilant_chime.mp3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0

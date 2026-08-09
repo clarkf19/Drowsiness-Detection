@@ -37,3 +37,12 @@ models/*.tflite
 models/*.pth
 processed/
 datasets/
+
+# Temporary environments & scratch files
+.tflite_venv/
+sample_drozy_frame.jpg
+
+# Temporary DROZY experiment outputs
+drozy_confusion_*.png
+drozy_results_5fold.csv
+drozy_final_summary.csv
