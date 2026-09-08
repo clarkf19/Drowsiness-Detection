@@ -1,9 +1,8 @@
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
-/// Point 13: Model Manager class that loads both TFLite models at app startup.
-/// Loads cnn.tflite as cnnInterpreter and lstm.tflite as lstmInterpreter.
+/// Manages loading and running inference for the CNN feature extractor
+/// and LSTM sequence classifier via TFLite.
 class ModelManager {
   Interpreter? _cnnInterpreter;
   Interpreter? _lstmInterpreter;
@@ -13,11 +12,12 @@ class ModelManager {
   Interpreter get cnnInterpreter => _cnnInterpreter!;
   Interpreter get lstmInterpreter => _lstmInterpreter!;
 
+  /// Loads both TFLite models from app assets
   Future<void> loadModels() async {
     if (_isLoaded) return;
 
     try {
-      // Configure interpreter options (use GPU delegate if available, else 4 CPU threads)
+      // 4 CPU threads for balanced performance and battery life
       final options = InterpreterOptions()..threads = 4;
 
       _cnnInterpreter = await Interpreter.fromAsset(
@@ -31,17 +31,17 @@ class ModelManager {
       );
 
       _isLoaded = true;
-      print('ModelManager: Both CNN and LSTM TFLite models loaded successfully.');
+      debugPrint('ModelManager: Both CNN and LSTM TFLite models loaded successfully.');
     } catch (e) {
-      print('ModelManager Error loading models: $e');
+      debugPrint('ModelManager Error loading models: $e');
       rethrow;
     }
   }
 
   /// Runs CNN inference on a preprocessed (1, 3, 224, 224) input tensor
-  /// Returns a 512-dimensional embedding List<double>
+  /// Returns a 512-dimensional embedding `List<double>`
   List<double> runCnnInference(List<List<List<List<double>>>> inputImageTensor) {
-    if (!_isLoaded) throw Exception('Models not loaded');
+    if (!_isLoaded) throw StateError('Models not loaded');
 
     // Output shape: [1, 512]
     var output = List.generate(1, (_) => List<double>.filled(512, 0.0));
@@ -52,7 +52,7 @@ class ModelManager {
   /// Runs LSTM inference on a (1, 30, 512) sequence tensor
   /// Returns 3 class logits: [Alert, Low Vigilant, Drowsy]
   List<double> runLstmInference(List<List<List<double>>> inputSequenceTensor) {
-    if (!_isLoaded) throw Exception('Models not loaded');
+    if (!_isLoaded) throw StateError('Models not loaded');
 
     // Output shape: [1, 3]
     var output = List.generate(1, (_) => List<double>.filled(3, 0.0));

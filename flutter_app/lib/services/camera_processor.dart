@@ -1,12 +1,12 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
 
-/// Points 14, 15, 16: Camera initialization, ML Kit Face Detection, face cropping (+20px padding),
-/// 224x224 resizing, pixel normalization (/255.0), and CHW tensor construction.
+/// Handles front camera initialization, ML Kit face detection,
+/// 20px padded cropping, 224x224 resizing, pixel normalization (/255.0),
+/// and CHW float tensor construction [1, 3, 224, 224].
 class CameraProcessor {
   CameraController? _cameraController;
   late FaceDetector _faceDetector;
@@ -16,7 +16,7 @@ class CameraProcessor {
   CameraController? get controller => _cameraController;
   bool get isInitialized => _isInitialized;
 
-  /// Point 14: Initialize front-facing camera at Medium resolution (~640x480)
+  /// Initialize front-facing camera at Medium resolution (~640x480)
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
     final frontCamera = cameras.firstWhere(
@@ -32,7 +32,7 @@ class CameraProcessor {
 
     await _cameraController!.initialize();
 
-    // Point 15: ML Kit face detector configured in fast performance mode
+    // ML Kit face detector in fast performance mode for low-latency driver tracking
     _faceDetector = FaceDetector(
       options: FaceDetectorOptions(
         performanceMode: FaceDetectorMode.fast,
@@ -45,7 +45,7 @@ class CameraProcessor {
     _isInitialized = true;
   }
 
-  /// Point 16: Capture frame photo & process face region into a [1, 3, 224, 224] CNN input tensor
+  /// Captures a frame and processes face region into [1, 3, 224, 224] CNN input tensor
   Future<List<List<List<List<double>>>>?> processNextFrameTensor() async {
     if (!_isInitialized || _cameraController == null || _isProcessing) {
       return null;
@@ -54,15 +54,15 @@ class CameraProcessor {
     _isProcessing = true;
 
     try {
-      // Take frame photo from front camera feed
+      // Capture frame photo
       final XFile photo = await _cameraController!.takePicture();
       final Uint8List bytes = await photo.readAsBytes();
 
-      // 1. Run ML Kit Face Detection on the photo file
+      // 1. Run ML Kit Face Detection
       final InputImage inputImage = InputImage.fromFilePath(photo.path);
       final faces = await _faceDetector.processImage(inputImage);
 
-      // Clean up temp photo file
+      // Clean up temporary photo file
       try {
         final File tempFile = File(photo.path);
         if (await tempFile.exists()) {
@@ -71,13 +71,13 @@ class CameraProcessor {
       } catch (_) {}
 
       if (faces.isEmpty) {
-        return null; // No face detected in this frame
+        return null; // No face detected in frame
       }
 
       final face = faces.first;
       final boundingBox = face.boundingBox;
 
-      // Decode image bytes
+      // Decode image
       final img.Image? fullImg = img.decodeImage(bytes);
       if (fullImg == null) return null;
 
@@ -93,7 +93,7 @@ class CameraProcessor {
       // 3. Resize cropped face to 224x224 pixels
       final img.Image resizedFace = img.copyResize(croppedFace, width: 224, height: 224);
 
-      // 4. Normalize pixel values by dividing by 255.0 -> Tensor shape [1, 3, 224, 224] (CHW format)
+      // 4. Normalize pixel values by 255.0 -> Tensor shape [1, 3, 224, 224] (CHW format)
       var inputTensor = List.generate(
         1,
         (_) => List.generate(
@@ -108,15 +108,15 @@ class CameraProcessor {
       for (int r = 0; r < 224; r++) {
         for (int c = 0; c < 224; c++) {
           final pixel = resizedFace.getPixel(c, r);
-          inputTensor[0][0][r][c] = pixel.r / 255.0; // Red channel
-          inputTensor[0][1][r][c] = pixel.g / 255.0; // Green channel
-          inputTensor[0][2][r][c] = pixel.b / 255.0; // Blue channel
+          inputTensor[0][0][r][c] = pixel.r / 255.0; // Red
+          inputTensor[0][1][r][c] = pixel.g / 255.0; // Green
+          inputTensor[0][2][r][c] = pixel.b / 255.0; // Blue
         }
       }
 
       return inputTensor;
     } catch (e) {
-      print('CameraProcessor frame processing error: $e');
+      debugPrint('CameraProcessor frame processing error: $e');
       return null;
     } finally {
       _isProcessing = false;
@@ -126,5 +126,6 @@ class CameraProcessor {
   void dispose() {
     _cameraController?.dispose();
     _faceDetector.close();
+    _isInitialized = false;
   }
 }

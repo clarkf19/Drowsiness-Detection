@@ -4,53 +4,66 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: ^3.12.2
 
-# Point 10 – all required dependencies
 dependencies:
   flutter:
     sdk: flutter
 
   # Camera
-  camera: ^0.10.5+9
+  camera: ^0.11.0+2
 
-  # On-device TFLite inference (Point 13)
-  tflite_flutter: ^0.10.4
+  # On-device TFLite inference
+  tflite_flutter: ^0.12.1
 
-  # Face detection – replaces MediaPipe (Point 15)
+  # Face detection
   google_mlkit_face_detection: ^0.11.0
 
-  # Image processing / resizing (Point 16)
+  # Image processing / resizing
   image: ^4.2.0
 
-  # Audio alert (Point 24)
+  # Audio alert
   audioplayers: ^6.0.0
 
-  # Haptic vibration (Point 24)
-  vibration: ^2.0.0
+  # Haptic vibration
+  vibration: ^3.2.1
 
-  # Permissions (camera) (Point 12)
+  # Permissions (camera)
   permission_handler: ^11.3.1
 
-  # State management (Point 21)
+  # State management
   provider: ^6.1.2
 
-  # Unique session ID (Point 17)
+  # Unique session ID
   uuid: ^4.4.2
+
+  # Settings storage
+  shared_preferences: ^2.2.3
+
+  # Local DB for trip history
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # Timeline charts
+  fl_chart: ^0.68.0
+
+  # Date & time formatting
+  intl: ^0.19.0
+
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
 
-  # Point 11 – TFLite model assets
   assets:
     - assets/models/cnn.tflite
     - assets/models/lstm.tflite
     - assets/models/mean.npy
     - assets/models/std.npy
-    - assets/sounds/alert_beep.mp3
-    - assets/sounds/low_vigilant_chime.mp3
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^3.0.0
+    - assets/sounds/alert_beep.wav
+    - assets/sounds/low_vigilant_chime.wav
